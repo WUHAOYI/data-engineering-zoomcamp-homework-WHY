@@ -1,0 +1,16 @@
+id: yellow_taxi_line_count
+namespace: nyc_tlc
+description: count lines
+
+tasks:
+  - id: download_and_count
+    type: io.kestra.plugin.scripts.python.Script
+    inputFiles:
+      requirements.txt: "{{ read('scripts/requirements.txt') }}"
+    beforeCommands:
+      - pip install -r requirements.txt
+    script: "{{ read('scripts/count_lines.py') }}"
+
+  - id: show_result
+    type: io.kestra.plugin.core.log.Log
+    message: "Total lines in 2020: {{ outputs.download_and_count.vars.total_lines }}"
